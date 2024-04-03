@@ -14,7 +14,11 @@ int main(void)
 
 	/* ---------------- LOGGING ---------------- */
 
+	logger =		log_create( "/home/utnso/tp0.log" , "log_cliente", true, LOG_LEVEL_INFO);
+
 	logger = iniciar_logger();
+
+	log_info( logger, "Soy un Log");
 
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
@@ -24,10 +28,22 @@ int main(void)
 
 	config = iniciar_config();
 
+	config = config_create("/home/utnso/tp0/client/cliente.config");
+
 	// Usando el config creado previamente, leemos los valores del config y los 
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
 
+	ip = config_get_string_value(config, "IP");
+	puerto = config_get_string_value(config, "PUERTO");
+
+
 	// Loggeamos el valor de config
+
+	log_info( logger, ip);
+	log_info( logger, puerto);
+
+	config_destroy(config);
+	log_destroy( logger);
 
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
