@@ -26,13 +26,25 @@ int crear_conexion(char *ip, char* puerto)
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
 
-	getaddrinfo(ip, puerto, &hints, &server_info);
+	int resultado = getaddrinfo(ip, puerto, &hints, &server_info);
+		if (resultado != 0){
+			printf ("Error en getaddrinfo: %s", gai_strerror (resultado));
+			exit (-1);
+		}
 
 	// Ahora vamos a crear el socket.
-	int socket_cliente = 0;
+	int socket_cliente = socket(server_info->ai_family,
+					server_info->ai_socktype,
+					server_info->ai_protocol);
 
 	// Ahora que tenemos el socket, vamos a conectarlo
-
+	int connect_resultado = connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen);
+		if (connect_resultado == 0) {
+			printf ("El cliente se conecto al servidor correctamente.");
+		}
+		else {
+			printf ("Error al conectar cliente.");
+		}
 
 	freeaddrinfo(server_info);
 

@@ -1,4 +1,5 @@
 #include "client.h"
+#include <readline/readline.h>
 
 int main(void)
 {
@@ -7,18 +8,19 @@ int main(void)
 	int conexion;
 	char* ip;
 	char* puerto;
-	char* valor;
+	//char* valor;
 
 	t_log* logger;
 	t_config* config;
 
 	/* ---------------- LOGGING ---------------- */
-
-	logger =		log_create( "/home/utnso/tp0.log" , "log_cliente", true, LOG_LEVEL_INFO);
-
 	logger = iniciar_logger();
 
-	log_info( logger, "Soy un Log");
+	logger = log_create( ".//tp0.log" , "log_cliente", true, LOG_LEVEL_INFO);
+
+
+
+//	log_info( logger, "Hola, Soy un Log");
 
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
@@ -28,7 +30,11 @@ int main(void)
 
 	config = iniciar_config();
 
-	config = config_create("/home/utnso/tp0/client/cliente.config");
+	config = config_create(".//cliente.config");
+		if (config == NULL){
+
+		}
+		
 
 	// Usando el config creado previamente, leemos los valores del config y los 
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
@@ -38,17 +44,19 @@ int main(void)
 
 
 	// Loggeamos el valor de config
-
-	log_info( logger, ip);
-	log_info( logger, puerto);
+	log_info(logger, "Leí la ip: %s y puerto: %s\n", ip, puerto);
+	//log_info( logger, ip);
+	//log_info( logger, puerto);
 
 	config_destroy(config);
-	log_destroy( logger);
+	
 
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
 
 	leer_consola(logger);
+		
+	log_destroy( logger);
 
 	/*---------------------------------------------------PARTE 3-------------------------------------------------------------*/
 
@@ -87,8 +95,20 @@ void leer_consola(t_log* logger)
 	char* leido;
 
 	// La primera te la dejo de yapa
+	while (1){
 	leido = readline("> ");
 
+	if (strcmp (leido, "") == 0) {
+		break;
+	}	
+
+	log_info( logger, leido);
+	printf ("%s/n", leido);
+
+	free (leido);
+
+	}
+	
 	// El resto, las vamos leyendo y logueando hasta recibir un string vacío
 
 
